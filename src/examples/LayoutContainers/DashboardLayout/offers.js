@@ -16,7 +16,7 @@ import Card from "@mui/material/Card";
 //Axios imports
 import axios from "axios";
 import { ethers } from "ethers";
-
+import swal from "sweetalert";
 import { useState, useRef } from "react";
 
 const OffersModal = ({ open, onClose }) => {
@@ -55,7 +55,7 @@ const OffersModal = ({ open, onClose }) => {
   };
 
   const handleMints = () => {
-    console.log("clicked minths");
+    swal("Great Job !! Done", "your offer is ready", "success");
 
     axios
       .post("http://localhost/backend/web5/offers/index.php", {

@@ -86,7 +86,7 @@ function Tables() {
   // const [record, setRecord]= useState([]);
 
   const [, dispatch] = useMaterialUIController();
-
+  const baseUrl = process.env.REACT_BACKEND_BASE_URL;
   const [landId, setLandId] = useState(9);
   const [id, setId] = useState(9);
   const [land_loard, setLand_loard] = useState("");
@@ -116,19 +116,12 @@ function Tables() {
   const [loginStatus, setLoginStatus] = useState(false);
 
   const [selectedFile, setSelectedFile] = useState(null);
-  const [mints, setMints] = useState([]);
-  const [userName, setUserName] = useState("");
+
 
   const [cookies] = useCookies(["phone_number"]);
   const phone_number = cookies.phone_number;
 
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
-  };
-
-  const handleCoordinatesChange = (e) => {
-    setCoordinates(e.target.value);
-  };
+  
 
   const handleChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -142,7 +135,7 @@ function Tables() {
     formData.append("coordinates", coordinates);
 
     axios
-      .post("http://localhost/backend/uploads/index.php", formData, {
+      .post(`${baseUrl}/uploads/index.php`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -157,12 +150,7 @@ function Tables() {
       });
   };
 
-  // Changing the direction to rtl
-  // useEffect(() => {
-  //   setDirection(dispatch, "rtl");
 
-  //   return () => setDirection(dispatch, "ltr");
-  // }, []);
 
   //listening to events
 
@@ -188,7 +176,7 @@ function Tables() {
 
   const loadRecent = async () => {
     try {
-      const res = await fetch("http://localhost:80//backend/images/");
+      const res = await fetch(`${baseUrl}/backend/images/`);
       const json = await res.json();
       //setCid(json.ipfs_pin_hash);
     } catch (e) {
@@ -316,7 +304,7 @@ function Tables() {
   const fetchLandUrl = async () => {
     try {
       axios
-        .get("http://localhost/backend/image/", {
+        .get(`${baseUrl}/backend/image/`, {
           params: {
             id: searchId,
           },

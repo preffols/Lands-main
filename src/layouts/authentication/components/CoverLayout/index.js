@@ -29,6 +29,8 @@ import PageLayout from "examples/LayoutContainers/PageLayout";
 
 // Authentication layout components
 import Footer from "layouts/authentication/components/Footer";
+import logo from "assets/images/logo-ct.png";
+
 
 function CoverLayout({ coverHeight, image, children }) {
   return (
@@ -36,8 +38,8 @@ function CoverLayout({ coverHeight, image, children }) {
       <DefaultNavbar
         action={{
           type: "external",
-          route: "https://creative-tim.com/product/material-dashboard-react",
-          label: "Mzuzu",
+          route: "https://www.chaintechhub.com",
+          label: "Mzuzu Land Registry",
         }}
         transparent
         light

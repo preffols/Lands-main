@@ -110,7 +110,7 @@ function DefaultNavbar({ transparent, light, action }) {
           pl={{ xs: 0, lg: 1 }}
         >
           <MDTypography variant="button" fontWeight="bold" color={light ? "white" : "dark"}>
-            Mzuzu land registry
+          <img src="/assets/images/logo-ct.png" alt="Mzuzu Land Registry Logo" style={{ width: '100px', height: 'auto' }} />
           </MDTypography>
         </MDBox>
         <MDBox color="inherit" display={{ xs: "none", lg: "flex" }} m={0} p={0}>

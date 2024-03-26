@@ -16,15 +16,12 @@ import Card from "@mui/material/Card";
 //Axios imports
 import axios from "axios";
 import { ethers } from "ethers";
+import swal from "sweetalert";
 
 import { useState, useRef } from "react";
 
-//contracts data
-
-import LandAbi from "./../../../contractsData/Land.json";
-import LandAddress from "./../../../contractsData/Land-address.json";
-import LandProcessAbi from "./../../../contractsData/LandProcess.json";
-import LandProcessAddress from "./../../../contractsData/LandProcess-address.json";
+import LandTransfersContractAbi from "assets/contractsData/LandTransfersContract.json";
+import LandTransfersContractAddress from "assets/contractsData/LandTransfersContract-address.json";
 
 const ApplicationsModal = ({ open, onClose }) => {
   const [landId, setLandId] = useState("9");
@@ -79,18 +76,18 @@ const ApplicationsModal = ({ open, onClose }) => {
     const wallet = ethers.Wallet.createRandom().connect(provider);
 
     //instance of contract for land transfers
-    const landProcessContract = new ethers.Contract(
-      LandProcessAddress.address,
-      LandProcessAbi.abi,
+    const landTransfersContractContract = new ethers.Contract(
+      LandTransfersContractAddress.address,
+      LandTransfersContractAbi.abi,
       wallet
     );
 
     //instance of contract for land registration
-    const landsContract = new ethers.Contract(
-      LandAddress.address,
-      LandAbi.abi,
-      wallet
-    );
+    // const landsContract = new ethers.Contract(
+    //   LandAddress.address,
+    //   LandAbi.abi,
+    //   wallet
+    // );
 
     //getting address
     const address = await wallet.getAddress();
@@ -106,8 +103,8 @@ const ApplicationsModal = ({ open, onClose }) => {
         description: description,
         address: address.toString(),
         wallet: JSON.stringify(wallet),
-        land: JSON.stringify(landsContract),
-        land_process: JSON.stringify(landProcessContract),
+        land: JSON.stringify(landTransfersContractContract),
+        land_process: JSON.stringify(landTransfersContractContract),
         land_id: landId,
       })
       .then(function (response) {

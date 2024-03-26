@@ -15,6 +15,7 @@ Coded by www.creative-tim.com
 
 // react-router-dom components
 import { Link } from "react-router-dom";
+import { useNavigate, Route, Routes } from 'react-router-dom';
 
 // prop-types is a library for typechecking of props
 import PropTypes from "prop-types";
@@ -29,10 +30,31 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
 import MDAvatar from "components/MDAvatar";
+import { Grid, IconButton } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { layouts } from "chart.js";
+import LandListedDetails from "layouts/tables/client/land_listed_details.js";
+import { useParams } from 'react-router-dom';
 
-function DefaultProjectCard({ image, label, title, description, action, authors }) {
+
+function DefaultProjectCard({ image, price, title, size, listed_id, land_owner, location, layout, action, authors }) {
+
+ const  LandBuyUrl = '/tables/client/LandListedDetails'
+ 
+// Inside your component
+const navigate = useNavigate();
+// Navigate to the desired route and pass the projectId as a parameter
+
+const handleBuyClick = (projectId) => {
+  // Navigate to the desired route and pass the projectId as a parameter
+  window.location.href = `/tables/client/land_listed_details/`;
+ };
   const renderAuthors = authors.map(({ image: media, name }) => (
     <Tooltip key={name} title={name} placement="bottom">
+        <Routes>
+      <Route path="/tables/client/land_listed_details" element={<LandListedDetails  projectId={listed_id}/>} />
+      </Routes>
+      
       <MDAvatar
         src={media}
         alt={name}
@@ -60,7 +82,9 @@ function DefaultProjectCard({ image, label, title, description, action, authors 
         boxShadow: "none",
         overflow: "visible",
       }}
-    >
+    ><Routes>
+      <Route path="/tables/client/LandListedDetails/:projectId" element={<LandListedDetails />} />
+      </Routes>
       <MDBox position="relative" width="100.25%" shadow="xl" borderRadius="xl">
         <CardMedia
           src={image}
@@ -77,8 +101,20 @@ function DefaultProjectCard({ image, label, title, description, action, authors 
       </MDBox>
       <MDBox mt={1} mx={0.5}>
         <MDTypography variant="button" fontWeight="regular" color="text" textTransform="capitalize">
-          {label}
+         size(ha) :{size}
         </MDTypography>
+        </MDBox>
+        <MDBox mt={1} mx={0.5}>
+        <MDTypography variant="button" fontWeight="regular" color="text" textTransform="capitalize">
+         location :{location}
+        </MDTypography>
+        </MDBox>
+        <MDBox mt={1} mx={0.5}>
+        <MDTypography variant="button" fontWeight="regular" color="text" textTransform="capitalize">
+         price :{price}
+        </MDTypography>
+       
+
         <MDBox mb={1}>
           {action.type === "internal" ? (
             <MDTypography
@@ -104,25 +140,39 @@ function DefaultProjectCard({ image, label, title, description, action, authors 
         </MDBox>
         <MDBox mb={3} lineHeight={0}>
           <MDTypography variant="button" fontWeight="light" color="text">
-            {description}
+           owner :  {land_owner}
           </MDTypography>
         </MDBox>
         <MDBox display="flex" justifyContent="space-between" alignItems="center">
           {action.type === "internal" ? (
-            <MDButton
-              component={Link}
-              to={action.route}
-              variant="outlined"
-              size="small"
-              color={action.color}
-            >
-              {action.label}
-            </MDButton>
+             <Grid container spacing={2} alignItems="center">
+             <Grid item>
+               <MDButton
+                
+               
+                 variant="outlined"
+                 size="small"
+                 color={action.color}
+                 sx={{ marginRight: 2 }} // Add spacing between buttons
+                 onClick={() => handleBuyClick(listed_id)}
+               >
+                 {action.label}
+               </MDButton>
+             </Grid>
+             <Grid item>
+             view<IconButton component={Link} to={layout} color={action.color}>
+                 <VisibilityIcon />
+               </IconButton>
+             </Grid>
+           </Grid>
+         
+            
           ) : (
             <MDButton
+            
               component="a"
-              href={action.route}
-              target="_blank"
+              href={`/tables/client/land_listed_details/`}
+              target="/tables/client/land_listed_details/"
               rel="noreferrer"
               variant="outlined"
               size="small"

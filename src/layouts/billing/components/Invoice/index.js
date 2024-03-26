@@ -23,7 +23,15 @@ import Icon from "@mui/material/Icon";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 
-function Invoice({ date, id, price, noGutter }) {
+function Invoice({ id, deed_number, title_deed, date }) {
+  const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
+  const printRowToPDF = () => {
+    window.open(
+      `http://localhost/backend/offer_letter/pdf.php?row_id=${id}&deed_number=${deed_number}&title_deed=${title_deed}&date=${date}`,
+      "_blank"
+    );
+  };
+
   return (
     <MDBox
       component="li"
@@ -32,19 +40,18 @@ function Invoice({ date, id, price, noGutter }) {
       alignItems="center"
       py={1}
       pr={1}
-      mb={noGutter ? 0 : 1}
     >
       <MDBox lineHeight={1.125}>
         <MDTypography display="block" variant="button" fontWeight="medium">
-          {date}
+          {title_deed}
         </MDTypography>
         <MDTypography variant="caption" fontWeight="regular" color="text">
-          {id}
+          {deed_number}
         </MDTypography>
       </MDBox>
       <MDBox display="flex" alignItems="center">
         <MDTypography variant="button" fontWeight="regular" color="text">
-          {price}
+          {date}
         </MDTypography>
         <MDBox
           display="flex"
@@ -53,25 +60,23 @@ function Invoice({ date, id, price, noGutter }) {
           ml={3}
           sx={{ cursor: "pointer" }}
         >
-          <form
-            action="http://localhost/backend/offer_letter/pdf.php"
-            method="POST"
-          >
+          <button onClick={printRowToPDF}>
             <Icon fontSize="small">picture_as_pdf</Icon>
-          </form>
-          <MDTypography variant="button" fontWeight="bold">
-            &nbsp;PDF
-          </MDTypography>
+
+            <MDTypography variant="button" fontWeight="bold">
+              &nbsp;PDF
+            </MDTypography>
+          </button>
         </MDBox>
       </MDBox>
     </MDBox>
   );
 }
 
-// Setting default values for the props of Invoice
-Invoice.defaultProps = {
-  noGutter: false,
-};
+// // Setting default values for the props of Invoice
+// Invoice.defaultProps = {
+//   noGutter: false,
+// };
 
 // Typechecking props for the Invoice
 Invoice.propTypes = {

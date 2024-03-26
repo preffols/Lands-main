@@ -17,7 +17,8 @@ import { useEffect, useState } from "react";
 import routes from "../../../routes";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 // react-router-dom components
-import { Link, useNavigate } from "react-router-dom";
+// react-router-dom components
+import { Link, redirect, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -56,19 +57,19 @@ import MDAlert from "components/MDAlert";
 
 import swal from "sweetalert";
 
-function Basic({ route, navigation }) {
-  console.log(route);
+function Basic({ route, }) {
+ 
   //const [lands, landProcess] = route.params;
   const [rememberMe, setRememberMe] = useState(false);
   const [phone_number, setPhone_number] = useState(" ");
   const [password, setPassword] = useState(" ");
   const [loginStatus, setLoginStatus] = useState(false);
 
-  const navigate = useNavigate();
+  const navigation = useNavigate();
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
   const [cookies, setCookie, removeCookie] = useCookies(["phone_number"]);
-
+  const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
   const handlePassword = (event) => {
     event.preventDefault();
 
@@ -103,19 +104,34 @@ function Basic({ route, navigation }) {
     try {
       axios
         .get(
-          "http://localhost/backend/web5/auth",
+          `${baseUrl}/web5/auth`,
 
-          { params: { full_name: phone_number } }
+          { params: { email: phone_number } }
         )
         .then(function (response) {
           const res = response.data;
-
+         
           if (res.length > 0) {
             res.map((results) => {
               if (results.password.toString() == password) {
+            
                 setCookie("phone_number", results.phone_number, { path: "/" });
-                swal(" That`s Great ", results.full_name.toString());
-                navigate("./../../tables/");
+                setCookie("full_name", results.full_name, { path: "/" });
+
+                //if admin
+                if(results.role === 1){
+                  navigation("/tables/land");
+                  //navigate("layouts/tables/land/");
+                 
+                  
+                }
+            //user
+               else{
+                //navigate("layouts/tables/client");
+                navigation("/tables/client/");
+                
+               }
+              
               } else {
                 swal("Sorry wrong details", "Try again");
               }
@@ -197,7 +213,7 @@ function Basic({ route, navigation }) {
             <MDBox mb={2}>
               <MDInput
                 type="text"
-                label="Phone Number"
+                label="Email"
                 onChange={handlePhone_number}
                 fullWidth
               />

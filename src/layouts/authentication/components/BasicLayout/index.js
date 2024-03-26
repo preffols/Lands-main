@@ -32,14 +32,7 @@ import Footer from "layouts/authentication/components/Footer";
 function BasicLayout({ image, children }) {
   return (
     <PageLayout>
-      <DefaultNavbar
-        action={{
-          type: "external",
-          route: "https://creative-tim.com/product/material-dashboard-react",
-          label: "Mzuzu",
-          color: "dark",
-        }}
-      />
+      
       <MDBox
         position="absolute"
         width="100%"
@@ -56,13 +49,13 @@ function BasicLayout({ image, children }) {
           backgroundRepeat: "no-repeat",
         }}
       />
-      <MDBox px={1} width="100%" height="100vh" mx="auto">
+     
         <Grid container spacing={1} justifyContent="center" alignItems="center" height="100%">
-          <Grid item xs={11} sm={9} md={5} lg={4} xl={3}>
+        <Grid item xs={22} sm={10} md={8} lg={6} xl={4}>
             {children}
           </Grid>
         </Grid>
-      </MDBox>
+ 
       <Footer light />
     </PageLayout>
   );

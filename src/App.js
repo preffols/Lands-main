@@ -29,7 +29,7 @@ import MDBox from "components/MDBox";
 // Material Dashboard 2 React example components
 import Sidenav from "examples/Sidenav";
 import Configurator from "examples/Configurator";
-
+import ClientSidenav from "examples/Sidenav/clientnav";
 // Material Dashboard 2 React themes
 import theme from "assets/theme";
 import themeRTL from "assets/theme/theme-rtl";
@@ -47,7 +47,12 @@ import createCache from "@emotion/cache";
 import routes from "routes";
 
 // Material Dashboard 2 React contexts
-import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
+import {
+  useMaterialUIController,
+  setMiniSidenav,
+  setClientMiniSidenav,
+  setOpenConfigurator,
+} from "context";
 
 // Images
 import brandWhite from "assets/images/logo-ct.png";
@@ -55,11 +60,11 @@ import brandDark from "assets/images/logo-ct-dark.png";
 import { CookiesProvider, useCookies } from "react-cookie";
 
 export default function App() {
-
   const [cookies, setCookie] = useCookies(["user"]);
   const [controller, dispatch] = useMaterialUIController();
   const {
     miniSidenav,
+    clientSidenav,
     direction,
     layout,
     openConfigurator,
@@ -88,18 +93,21 @@ export default function App() {
       setMiniSidenav(dispatch, false);
       setOnMouseEnter(true);
     }
+   
   };
 
   // Close sidenav when mouse leave mini sidenav
   const handleOnMouseLeave = () => {
     if (onMouseEnter) {
       setMiniSidenav(dispatch, true);
+    
       setOnMouseEnter(false);
     }
   };
 
   // Change the openConfigurator state
-  const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
+  const handleConfiguratorOpen = () =>
+    setOpenConfigurator(dispatch, !openConfigurator);
 
   // Setting the dir attribute for the body element
   useEffect(() => {
@@ -112,17 +120,30 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
+  
+
   const getRoutes = (allRoutes) =>
-    allRoutes.map((route) => {
+    allRoutes.flatMap((route) => {
       if (route.collapse) {
-        return getRoutes(route.collapse);
+        return [
+          ...getRoutes(route.collapse),
+          <Route
+            exact
+            path={route.route}
+            element={route.component}
+            key={route.key}
+          />,
+        ];
       }
 
-      if (route.route) {
-        return <Route exact path={route.route} element={route.component} key={route.key} />;
-      }
-
-      return null;
+      return route.route ? (
+        <Route
+          exact
+          path={route.route}
+          element={route.component}
+          key={route.key}
+        />
+      ) : null;
     });
 
   const configsButton = (
@@ -150,15 +171,85 @@ export default function App() {
   );
 
   return direction === "rtl" ? (
-    <CookiesProvider defaultSetOptions={{ path: '/' }}>
-    <CacheProvider value={rtlCache}>
-      <ThemeProvider theme={darkMode ? themeDarkRTL : themeRTL}>
+    <CookiesProvider defaultSetOptions={{ path: "/" }}>
+      <CacheProvider value={rtlCache}>
+        <ThemeProvider theme={darkMode ? themeDarkRTL : themeRTL}>
+          <CssBaseline />
+          {layout === "dashboard" && (
+            <>
+              <Sidenav
+                color={sidenavColor}
+                brand={
+                  (transparentSidenav && !darkMode) || whiteSidenav
+                    ? brandDark
+                    : brandWhite
+                }
+                brandName="Mzuzu Land Registry"
+                routes={routes}
+                onMouseEnter={handleOnMouseEnter}
+                onMouseLeave={handleOnMouseLeave}
+              />
+              <Configurator />
+              {configsButton}
+            </>
+          )}
+           {layout === "client" && (
+            <>
+              <ClientSidenav
+                color={sidenavColor}
+                brand={
+                  (transparentSidenav && !darkMode) || whiteSidenav
+                    ? brandDark
+                    : brandWhite
+                }
+                brandName="Mzuzu Land Registry"
+                routes={routes}
+                onMouseEnter={handleOnMouseEnter}
+                onMouseLeave={handleOnMouseLeave}
+              />
+              <Configurator />
+              {configsButton}
+            </>
+          )}
+          {layout === "vr" && <Configurator />}
+          <Routes>
+            {getRoutes(routes)}
+            <Route path="*" element={<Navigate to="/dashboard" />} />
+          </Routes>
+        </ThemeProvider>
+      </CacheProvider>
+    </CookiesProvider>
+  ) : (
+    <CookiesProvider defaultSetOptions={{ path: "/" }}>
+      <ThemeProvider theme={darkMode ? themeDark : theme}>
         <CssBaseline />
         {layout === "dashboard" && (
           <>
             <Sidenav
               color={sidenavColor}
-              brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
+              brand={
+                (transparentSidenav && !darkMode) || whiteSidenav
+                  ? brandDark
+                  : brandWhite
+              }
+              brandName="Mzuzu Land Registry"
+              routes={routes}
+              onMouseEnter={handleOnMouseEnter}
+              onMouseLeave={handleOnMouseLeave}
+            />
+            <Configurator />
+            {configsButton}
+          </>
+        )}
+        {layout === "client" && (
+          <>
+            <ClientSidenav
+              color={sidenavColor}
+              brand={
+                (transparentSidenav && !darkMode) || whiteSidenav
+                  ? brandDark
+                  : brandWhite
+              }
               brandName="Mzuzu Land Registry"
               routes={routes}
               onMouseEnter={handleOnMouseEnter}
@@ -171,35 +262,9 @@ export default function App() {
         {layout === "vr" && <Configurator />}
         <Routes>
           {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+          <Route path="*" element={<Navigate to="/authentication/register" />} />
         </Routes>
       </ThemeProvider>
-    </CacheProvider>
-    </CookiesProvider>
-  ) : (
-    <CookiesProvider defaultSetOptions={{ path: '/' }}>
-    <ThemeProvider theme={darkMode ? themeDark : theme}>
-      <CssBaseline />
-      {layout === "dashboard" && (
-        <>
-          <Sidenav
-            color={sidenavColor}
-            brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-            brandName="Mzuzu Land Registry"
-            routes={routes}
-            onMouseEnter={handleOnMouseEnter}
-            onMouseLeave={handleOnMouseLeave}
-          />
-          <Configurator />
-          {configsButton}
-        </>
-      )}
-      {layout === "vr" && <Configurator />}
-      <Routes>
-        {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
-      </Routes>
-    </ThemeProvider>
     </CookiesProvider>
   );
 }

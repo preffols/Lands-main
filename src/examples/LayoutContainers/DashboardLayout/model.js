@@ -12,7 +12,7 @@ import MDTypography from "components/MDTypography";
 
 import axios from "axios";
 import { render } from "react-dom";
-import swal from "sweetAlert";
+import swal from "sweetalert";
 
 const ModalPopup = ({ open, onClose }) => {
   const [description, setDescription] = useState("Description");
@@ -22,8 +22,25 @@ const ModalPopup = ({ open, onClose }) => {
   const [type, setType] = useState("");
   const [size, setSize] = useState("");
 
+  const [TRCoorinate, setTRCoordinate] = useState("");
+  const [TLCoorinate, setTLCoordinate] = useState("");
+  const [BRCoorinate, setBRCoordinate] = useState("");
+  const [BLCoorinate, setBLCoordinate] = useState("");
+
   const inputFile = useRef(null);
 
+  const handleTR = (event) => {
+    setTRCoordinate(event.target.files[0]);
+  };
+  const handleTL = (event) => {
+    setTLCoordinate(event.target.files[0]);
+  };
+  const handleBR = (event) => {
+    setBRCoordinate(event.target.files[0]);
+  };
+  const handleBL = (event) => {
+    setBLCoordinate(event.target.files[0]);
+  };
   const handleChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
@@ -45,15 +62,20 @@ const ModalPopup = ({ open, onClose }) => {
     setLand_loard(e.target.value);
   };
 
+  // Construct the Google Maps URL with the rectangle parameters
+  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${TRCoorinate},${TLCoorinate}&query=${BRCoorinate},${BLCoorinate}&view=rectangle`;
+
   const handleMints = () => {
     const formData = new FormData();
-    formData.append("selectedFile", selectedFile);
+    formData.append("selectedFile", mapUrl);
     formData.append("land_id", landCode);
     formData.append("type", type);
     formData.append("size", size);
     formData.append("land_loard", land_loard);
     formData.append("description", description);
-    swal("Do you want to register new land", landCode.toString());
+
+    swal("Great Job !! Registered Land", landCode.toString(), "success");
+
     axios
       .post("http://localhost/backend/web5/land_layouts/index.php", formData, {
         headers: {
@@ -150,7 +172,7 @@ const ModalPopup = ({ open, onClose }) => {
                     <MDBox mb={2}>
                       <MDInput
                         type="text"
-                        label="Size"
+                        label="Size(ha)"
                         variant="standard"
                         onChange={handleSize}
                         fullWidth
@@ -169,16 +191,46 @@ const ModalPopup = ({ open, onClose }) => {
                       />
                     </MDBox>
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={3}>
                     <MDBox mb={2}>
-                      Map
                       <MDInput
-                        type="file"
-                        label="Land"
+                        type="text"
+                        label="Top Left"
                         variant="standard"
-                        id="file"
-                        ref={inputFile}
-                        onChange={handleChange}
+                        onChange={handleTL}
+                        fullWidth
+                      />
+                    </MDBox>
+                  </Grid>
+                  <Grid item xs={12} sm={3}>
+                    <MDBox mb={2}>
+                      <MDInput
+                        type="text"
+                        label="Top Right"
+                        variant="standard"
+                        onChange={handleTR}
+                        fullWidth
+                      />
+                    </MDBox>
+                  </Grid>
+                  <Grid item xs={12} sm={3}>
+                    <MDBox mb={2}>
+                      <MDInput
+                        type="text"
+                        label="Bottom Left"
+                        variant="standard"
+                        onChange={handleBL}
+                        fullWidth
+                      />
+                    </MDBox>
+                  </Grid>
+                  <Grid item xs={12} sm={3}>
+                    <MDBox mb={2}>
+                      <MDInput
+                        type="text"
+                        label="Bottom Right"
+                        variant="standard"
+                        onChange={handleBR}
                         fullWidth
                       />
                     </MDBox>

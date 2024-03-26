@@ -1,30 +1,26 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// @mui material components
+import React, { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
-
-// Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
-
-// Billing page components
 import Invoice from "layouts/billing/components/Invoice";
+import axios from "axios";
 
 function Invoices() {
+  const [invoices, setInvoices] = useState([]);
+  const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
+  useEffect(async () => {
+
+    try {
+      const response = await axios.get(`http://localhost/backend/web5/title_deeds/`);
+      console.log(`hey prince am here` ,response.data)
+      setInvoices(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+   
+  }, []);
+
   return (
     <Card sx={{ height: "100%" }}>
       <MDBox
@@ -43,16 +39,17 @@ function Invoices() {
       </MDBox>
       <MDBox p={2}>
         <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
-          <Invoice date="March, 01, 2020" id="#MS-415646" price="$180" />
-          <Invoice date="February, 10, 2021" id="#RV-126749" price="$250" />
-          <Invoice date="April, 05, 2020" id="#QW-103578" price="$120" />
-          <Invoice date="June, 25, 2019" id="#MS-415646" price="$180" />
-          <Invoice
-            date="March, 01, 2019"
-            id="#AR-803481"
-            price="$300"
-            noGutter
-          />
+          {invoices.map((invoice, index) => (
+            <Invoice
+              id={invoice.land_code
+              }
+              key={index}
+              title_deed={invoice.title_deed_name}
+              deed_number={invoice.title_deed_number}
+              date={invoice.transaction_hash
+                }
+            />
+          ))}
         </MDBox>
       </MDBox>
     </Card>

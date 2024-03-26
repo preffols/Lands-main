@@ -1,10 +1,10 @@
 /**
 =========================================================
-* Material Dashboard 2 React - v2.2.0
+* Material Dashboard 2 React - v2.1.0
 =========================================================
 
 * Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
+* Copyright 2022 Creative Tim (https://www.creative-tim.com)
 
 Coded by www.creative-tim.com
 
@@ -46,8 +46,14 @@ import {
   setTransparentSidenav,
   setWhiteSidenav,
 } from "context";
+import { useCookies } from "react-cookie";
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
+  
+  const [cookies, setCookie, removeCookie] = useCookies(["phone_number"]);
+
+const phone_number = cookies.phone_number;
+const user_name = cookies.full_name;
   const [controller, dispatch] = useMaterialUIController();
   const {
     miniSidenav,
@@ -153,7 +159,40 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           />
         );
       }
+      return returnValue;
+    }
+  );
 
+  const renderExampleRoutes = routes.map(
+    ({ type, name, icon, title, noCollapse, key, href, route }) => {
+      let returnValue;
+
+      if (type === "examples") {
+        returnValue = href ? (
+          <Link
+            href={href}
+            key={key}
+            target="_blank"
+            rel="noreferrer"
+            sx={{ textDecoration: "none" }}
+          >
+            <SidenavCollapse
+              name={name}
+              icon={icon}
+              active={key === collapseName}
+              noCollapse={noCollapse}
+            />
+          </Link>
+        ) : (
+          <NavLink key={key} to={route}>
+            <SidenavCollapse
+              name={name}
+              icon={icon}
+              active={key === collapseName}
+            />
+          </NavLink>
+        );
+      }
       return returnValue;
     }
   );
@@ -203,18 +242,32 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           (darkMode && !transparentSidenav && whiteSidenav)
         }
       />
-      <List>{renderRoutes}</List>
+      <List>
+        <MDBox display="flex flex-col" alignItems="center">
+        <MDTypography color={textColor} variant="body2" fontWeight="medium" pl="1.5rem">
+        {user_name}
+        </MDTypography>
+          {renderExampleRoutes}
+        </MDBox>
+        <Divider
+          light={
+            (!darkMode && !whiteSidenav && !transparentSidenav) ||
+            (darkMode && !transparentSidenav && whiteSidenav)
+          }
+        ></Divider>
+        {renderRoutes}
+      </List>
       <MDBox p={2} mt="auto">
         <MDButton
           component="a"
-          href="http://localhost:3000/"
+          href="https://www.creative-tim.com/product/material-dashboard-pro-react-nodejs"
           target="_blank"
           rel="noreferrer"
           variant="gradient"
           color={sidenavColor}
           fullWidth
         >
-          Sync
+          Log Out
         </MDButton>
       </MDBox>
     </SidenavRoot>

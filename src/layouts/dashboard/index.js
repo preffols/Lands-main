@@ -63,12 +63,12 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="dark"
                 icon="weekend"
-                title={cookies.address}
+                title="Total Lands"
                 count={281}
                 percentage={{
                   color: "success",
                   amount: "+55%",
-                  label: "than lask week",
+                  label: "total lands mapped",
                 }}
               />
             </MDBox>
@@ -77,12 +77,12 @@ function Dashboard() {
             <MDBox mb={1.5}>
               <ComplexStatisticsCard
                 icon="leaderboard"
-                title="Today's Users"
+                title="TotalUsers"
                 count="2,300"
                 percentage={{
                   color: "success",
                   amount: "+3%",
-                  label: "than last month",
+                  label: "land owners",
                 }}
               />
             </MDBox>
@@ -92,12 +92,12 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="success"
                 icon="store"
-                title="Revenue"
+                title="Listed Lands"
                 count="34k"
                 percentage={{
                   color: "success",
                   amount: "+1%",
-                  label: "than yesterday",
+                  label: "total listed lands",
                 }}
               />
             </MDBox>
@@ -107,12 +107,12 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="primary"
                 icon="person_add"
-                title="Followers"
+                title="Registered Lands"
                 count="+91"
                 percentage={{
                   color: "success",
                   amount: "",
-                  label: "Just updated",
+                  label: "Total Land Registered",
                 }}
               />
             </MDBox>
@@ -124,9 +124,9 @@ function Dashboard() {
               <MDBox mb={3}>
                 <ReportsBarChart
                   color="info"
-                  title="website views"
-                  description="Last Campaign Performance"
-                  date="campaign sent 2 days ago"
+                  title="Regitered Lands"
+                  description="Total lands  registered per Month against mapped"
+                  date="Past 7 days"
                   chart={reportsBarChartData}
                 />
               </MDBox>
@@ -135,10 +135,10 @@ function Dashboard() {
               <MDBox mb={3}>
                 <ReportsLineChart
                   color="success"
-                  title="daily sales"
+                  title="daily land sales"
                   description={
                     <>
-                      (<strong>+15%</strong>) increase in today sales.
+                      (<strong>+15%</strong>) Listed lands .
                     </>
                   }
                   date="updated 4 min ago"
@@ -150,8 +150,8 @@ function Dashboard() {
               <MDBox mb={3}>
                 <ReportsLineChart
                   color="dark"
-                  title="completed tasks"
-                  description="Last Campaign Performance"
+                  title="Revenue Collected"
+                  description="Lands Sales"
                   date="just updated"
                   chart={tasks}
                 />
@@ -160,14 +160,7 @@ function Dashboard() {
           </Grid>
         </MDBox>
         <MDBox>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={8}>
-              <Projects />
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-              <OrdersOverview />
-            </Grid>
-          </Grid>
+          
         </MDBox>
       </MDBox>
       <Footer />

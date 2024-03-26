@@ -16,7 +16,7 @@ import Card from "@mui/material/Card";
 //Axios imports
 import axios from "axios";
 import { ethers } from "ethers";
-
+import swal from "sweetalert";
 import { useState, useRef } from "react";
 
 const MyModal = ({ open, onClose }) => {
@@ -55,6 +55,7 @@ const MyModal = ({ open, onClose }) => {
 
   //api request to register ownership
   const handleMints = () => {
+    swal("Great Job !! Done", "Title registered", "success");
     axios
       .post("http://localhost/backend/web5/title_deeds/index.php", {
         title_deed: title,
@@ -75,6 +76,7 @@ const MyModal = ({ open, onClose }) => {
 
   //api request to transer ownership rights
   const handleTranser = () => {
+    swal("Great Job !! Done", "Transfer Successful", "success");
     axios
       .put("http://localhost/backend/web5/title_deeds/index.php", {
         title_deed: title,

@@ -22,7 +22,7 @@ import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
 import { Icon, IconButton } from "@mui/material";
 import DataTable from "react-data-table-component";
-
+//import DataTable from "examples/Tables/DataTable";
 // react-router-dom components
 import { Link } from "react-router-dom";
 // @mui material components
@@ -51,7 +51,7 @@ import { Cookies } from "react-cookie";
 import { useCookies } from "react-cookie";
 import MDAlert from "components/MDAlert";
 
-function DashboardLayout({ children }) {
+function LandView({ children }) {
   const [cookies, setCookie, removeCookie] = useCookies(["phone_number"]);
 
   // land collums
@@ -65,7 +65,7 @@ function DashboardLayout({ children }) {
       selector: (row) => row.land_loard,
     },
     {
-      name: "Size",
+      name: "Size(ha)",
       selector: (row) => row.size,
     },
     {
@@ -73,6 +73,13 @@ function DashboardLayout({ children }) {
       selector: (row) => row.layout,
     },
   ];
+  // columns: [
+  //   { Header: "LandCode", accessor: "project", width: "30%", align: "left" },
+  //   { Header: "LandLoard", accessor: "budget", align: "left" },
+  //   { Header: "size(ha)", accessor: "status", align: "center" },
+  //   { Header: "view", accessor: "completion", align: "center" },
+  //   { Header: "action", accessor: "action", align: "center" },
+  // ]
 
   //application colllumn
   const applicationsColumn = [
@@ -292,10 +299,14 @@ function DashboardLayout({ children }) {
               open={modalOpenApplication}
               onClose={handleModalCloseApplication}
             />
-            <DataTable
-              columns={applicationsColumn}
-              data={applicatin_record}
-            ></DataTable>
+
+            {/* <DataTable
+              table={{ applicationsColumn, applicatin_record }}
+              isSorted={false}
+              entriesPerPage={false}
+              showTotalEntries={false}
+              noEndBorder
+            /> */}
           </MDBox>
         </Grid>
 
@@ -323,7 +334,14 @@ function DashboardLayout({ children }) {
               open={modalOpenOffer}
               onClose={handleModalCloseOffer}
             />
-            <DataTable columns={OffersCollum} data={offers_record}></DataTable>
+            <DataTable columns={OffersCollum} data={OffersCollum}></DataTable>
+            {/* <DataTable
+              table={{ OffersCollum, applicatin_record }}
+              isSorted={false}
+              entriesPerPage={false}
+              showTotalEntries={false}
+              noEndBorder
+            /> */}
           </MDBox>
         </Grid>
         <Grid item xs={12}>
@@ -347,10 +365,10 @@ function DashboardLayout({ children }) {
 
           <MDBox pt={3}>
             <MyModal open={modalOpen} onClose={handleModalClose} />
-            <DataTable
+            {/* <DataTable
               columns={TransferCollum}
               data={land_title_record}
-            ></DataTable>
+            ></DataTable> */}
           </MDBox>
         </Grid>
         <Grid item xs={12}>
@@ -388,4 +406,4 @@ function DashboardLayout({ children }) {
 //   children: PropTypes.node.isRequired,
 // };
 
-export default DashboardLayout;
+export default LandView;
